@@ -174,7 +174,7 @@ export class ReportsService {
       const paymentStats = await this.fetchPaymentStats();
       const enrollmentStats = await this.fetchEnrollmentStats();
       const courseStats = await this.fetchCourseStats();
-
+      
       // Tạo dữ liệu báo cáo
       const reportData = {
         revenue: {
@@ -191,13 +191,11 @@ export class ReportsService {
           byCourse: enrollmentStats.enrollmentsByCourse,
           averageTimeToComplete: enrollmentStats.averageTimeToComplete,
           completionRate: enrollmentStats.averageCompletionRate,
+          popularCourses: enrollmentStats.popularCourses,
         },
         courses: {
           total: courseStats.totalCourses,
           active: courseStats.activeCourses,
-          // completionRate: courseStats.averageCompletionRate,
-          // popular: courseStats.popularCourses,
-          // viewsLast30Days: courseStats.viewsLast30Days,
         },
       };
 
@@ -219,5 +217,5 @@ export class ReportsService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-  }
+  } 
 }
