@@ -117,7 +117,7 @@ export class ReportsService {
       this.logger.log(`Fetching payment stats from ${baseUrl}/payment/stats`);
       
       const response = await firstValueFrom(
-        this.httpService.get(`${baseUrl}/payment/stats`),
+        this.httpService.get(`${baseUrl}/payments/get/stats`),
       );
       return response.data;
     } catch (error) {
@@ -135,7 +135,7 @@ export class ReportsService {
       this.logger.log(`Fetching enrollment stats from ${baseUrl}/enrollment/stats`);
       
       const response = await firstValueFrom(
-        this.httpService.get(`${baseUrl}/enrollment/stats`),
+        this.httpService.get(`${baseUrl}/enrollment/get/stats`),
       );
       return response.data;
     } catch (error) {
