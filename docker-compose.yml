@@ -7,11 +7,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3007:3007"
-    environment:
-      - PORT=3007
-      - NODE_ENV=production
-      - MONGODB_URI=mongodb://root:123456@mongodb:27017/reports?authSource=admin
-      - API_BASE_URL=http://localhost:3007
+    eenv_file:
+      - ./.env
     depends_on:
       - mongodb
     networks:
