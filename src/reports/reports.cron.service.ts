@@ -2,11 +2,20 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ReportsService } from './reports.service';
 
-@Injectable()
+@Injectable() 
 export class ReportsCronService {
   private readonly logger = new Logger(ReportsCronService.name);
 
-  constructor(private readonly reportsService: ReportsService) {}
+  constructor(private readonly reportsService: ReportsService) { }
+  //cú pháp cron::
+  //   * * * * * *
+  // | | | | | |
+  // | | | | | +-- Năm (tùy chọn)
+  // | | | | +---- Ngày trong tuần (0-7, 0 và 7 là Chủ nhật)
+  // | | | +------ Tháng (1-12)
+  // | | +-------- Ngày trong tháng (1-31)
+  // | +---------- Giờ (0-23)
+  // +------------ Phút (0-59)
 
   // Tạo báo cáo hàng ngày vào lúc 00:01
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
