@@ -16,7 +16,7 @@ export class ReportsService {
     @InjectModel(Report.name) private reportModel: Model<ReportDocument>,
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   async create(createReportDto: CreateReportDto): Promise<Report> {
     try {
@@ -115,7 +115,7 @@ export class ReportsService {
     try {
       const baseUrl = this.configService.get<string>('API_BASE_PAYMENT_URL') || 'https://payment.eduforge.io.vn';
       this.logger.log(`Fetching payment stats from ${baseUrl}/payment/stats`);
-      
+
       const response = await firstValueFrom(
         this.httpService.get(`${baseUrl}/payments/get/stats`),
       );
@@ -133,7 +133,7 @@ export class ReportsService {
     try {
       const baseUrl = this.configService.get<string>('API_BASE_ENROLLMENT_URL') || 'https://enrollment.eduforge.io.vn';
       this.logger.log(`Fetching enrollment stats from ${baseUrl}/enrollment/stats`);
-      
+
       const response = await firstValueFrom(
         this.httpService.get(`${baseUrl}/enrollment/get/stats`),
       );
@@ -151,7 +151,7 @@ export class ReportsService {
     try {
       const baseUrl = this.configService.get<string>('API_BASE_COURSE_URL') || 'https://courses.eduforge.io.vn';
       this.logger.log(`Fetching course stats from ${baseUrl}/courses/stats`);
-      
+
       const response = await firstValueFrom(
         this.httpService.get(`${baseUrl}/courses/stats`),
       );
@@ -169,12 +169,12 @@ export class ReportsService {
   async generateReport(userId: string): Promise<Report> {
     try {
       this.logger.log(`Generating report for user ${userId}`);
-      
+
       // Lấy dữ liệu từ các endpoint
       const paymentStats = await this.fetchPaymentStats();
       const enrollmentStats = await this.fetchEnrollmentStats();
       const courseStats = await this.fetchCourseStats();
-      
+
       // Tạo dữ liệu báo cáo
       const reportData = {
         revenue: {
@@ -200,7 +200,7 @@ export class ReportsService {
           active: courseStats.activeCourses, // Số khóa học đang hoạt động
         },
         monthlyStats: this.generateMonthlyComparisonData(
-          paymentStats.monthlyRevenue, 
+          paymentStats.monthlyRevenue,
           enrollmentStats.monthlyEnrollments
         ), // Dữ liệu so sánh theo tháng giữa doanh thu và số lượt đăng ký
       };
@@ -224,11 +224,11 @@ export class ReportsService {
       );
     }
   }
-   // Phương thức hỗ trợ để tạo dữ liệu doanh thu mẫu theo tháng nếu API không trả về
+  // Phương thức hỗ trợ để tạo dữ liệu doanh thu mẫu theo tháng nếu API không trả về
   private generateDefaultMonthlyRevenueData(): any[] {
-    const months = ['2025-01', '2025-02', '2025-03', '2025-04', '2025-05', '2025-06', 
-                   '2025-07', '2025-08', '2025-09', '2025-10', '2025-11', '2025-12'];
-    
+    const months = ['2025-01', '2025-02', '2025-03', '2025-04', '2025-05', '2025-06',
+      '2025-07', '2025-08', '2025-09', '2025-10', '2025-11', '2025-12'];
+
     return months.map((month) => {
       // Tạo dữ liệu mẫu với giá trị ngẫu nhiên từ 5000 đến 15000
       return {
@@ -237,12 +237,12 @@ export class ReportsService {
       };
     });
   }
-  
+
   // Phương thức hỗ trợ để tạo dữ liệu đăng ký mẫu theo tháng nếu API không trả về
   private generateDefaultMonthlyEnrollmentData(): any[] {
-    const months = ['2025-01', '2025-02', '2025-03', '2025-04', '2025-05', '2025-06', 
-                   '2025-07', '2025-08', '2025-09', '2025-10', '2025-11', '2025-12'];
-    
+    const months = ['2025-01', '2025-02', '2025-03', '2025-04', '2025-05', '2025-06',
+      '2025-07', '2025-08', '2025-09', '2025-10', '2025-11', '2025-12'];
+
     return months.map((month) => {
       // Tạo dữ liệu mẫu với giá trị ngẫu nhiên từ 100 đến 300
       return {
@@ -251,7 +251,7 @@ export class ReportsService {
       };
     });
   }
-  
+
   // Phương thức để tạo dữ liệu so sánh giữa các tháng
   private generateMonthlyComparisonData(revenueData: any[] = [], enrollmentData: any[] = []): any[] {
     // Nếu không có dữ liệu, tạo dữ liệu mẫu
@@ -265,16 +265,16 @@ export class ReportsService {
         };
       });
     }
-    
+
     // Chuyển đổi dữ liệu từ API thành định dạng phù hợp cho biểu đồ
     return revenueData.map(revItem => {
       // Tìm dữ liệu đăng ký tương ứng với tháng
       const enrollItem = enrollmentData.find(item => item.month === revItem.month) || { total: 0 };
-      
+
       // Lấy tháng từ chuỗi YYYY-MM
       const monthNum = parseInt(revItem.month.split('-')[1]);
       const monthName = `T${monthNum}`;
-      
+
       return {
         name: monthName,
         Doanh_thu: revItem.total,
